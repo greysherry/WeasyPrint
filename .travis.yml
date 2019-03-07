@@ -7,7 +7,7 @@ git:
 matrix:
   include:
     - os: windows
-      language: generic
+      language: sh
 
 addons:
   apt:
