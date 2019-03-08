@@ -11,10 +11,10 @@ matrix:
 
 before_install:
   - choco install python
-  - choco install msys2 --params "/NoUpdate"
+  - choco install msys2
 
 install:
-  - /c/tools/msys64/msys2_shell.cmd pacman -S mingw-w64-x86_64-gtk3
+  - /c/tools/msys64/msys2_shell.cmd -c "pacman -S mingw-w64-x86_64-gtk3"
   - py -m pip install --upgrade pip setuptools
 
 script:
