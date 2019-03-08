@@ -14,7 +14,7 @@ before_install:
   - choco install msys2
 
 install:
-  - powershell -executionpolicy bypass "C:\tools\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-gtk3'"
+  - powershell -executionpolicy bypass "C:\tools\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-gtk3 --noconfirm'"
   - py -m pip install --upgrade pip setuptools
 
 script:
