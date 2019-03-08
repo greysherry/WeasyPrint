@@ -13,8 +13,10 @@ before_install:
   - choco install python
   - py -m pip install --upgrade pip setuptools
   - wget "http://repo.msys2.org/distrib/x86_64/msys2-base-x86_64-20180531.tar.xz"
-  - 7z x msys2-base-x86_64-20180531.tar.xz
-  - ls
+  - 7z l msys2-base-x86_64-20180531.tar.xz
+  - 7z x msys2-base-x86_64-20180531.tar.xz $PWD
+  - echo $PWD
+  - ls -lA
   - ./msys64/msys2.exe pacman -Syuu
   - ./msys64/msys2.exe pacman -Su
   - ./msys64/msys2.exe pacman -S mingw-w64-x86_64-gtk3
