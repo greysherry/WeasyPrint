@@ -19,7 +19,8 @@ install:
   - ./msys64/msys2.exe pacman -Syuu
   - ./msys64/msys2.exe pacman -Su
   - ./msys64/msys2.exe pacman -S mingw-w64-x86_64-gtk3
-  - python -m pip install --upgrade pip setuptools
+  - py -m pip install --upgrade pip setuptools
 
 script:
-  - python setup.py test
+  - py -m pip install .[test]
+  - py -m pytest
