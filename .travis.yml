@@ -15,8 +15,7 @@ before_install:
 
 install:
   - ls /c/tools/msys64/
-  - ls /c/tools/msys64/usr/bin/
-  - /c/tools/msys64/usr/bin/bash -lc "pacman -S mingw-w64-x86_64-gtk3"
+  - /c/tools/msys64/usr/bin/pacman -S mingw-w64-x86_64-gtk3
   - py -m pip install --upgrade pip setuptools
 
 script:
