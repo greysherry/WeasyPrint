@@ -14,12 +14,9 @@ before_install:
   - choco install msys2
 
 install:
-  - ls /c/tools/
   - ls /c/tools/msys64/
-  - /c/tools/msys64/msys2_shell.cmd --help
-  - /c/tools/msys64/msys2.exe pacman -Syuu
-  - /c/tools/msys64/msys2.exe pacman -Su
-  - /c/tools/msys64/msys2.exe pacman -S mingw-w64-x86_64-gtk3
+  - ls /c/tools/msys64/usr/bin/
+  - /c/tools/msys64/usr/bin/bash -lc "pacman -S mingw-w64-x86_64-gtk3"
   - py -m pip install --upgrade pip setuptools
 
 script:
