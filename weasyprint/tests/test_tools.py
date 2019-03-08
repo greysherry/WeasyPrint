@@ -4,7 +4,7 @@
 
     Test WeasyPrint Web tools.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
@@ -14,9 +14,9 @@ from urllib.parse import urlencode
 
 import cairocffi as cairo
 
+from .testing_utils import assert_no_logs
 from ..tools import navigator, renderer
 from ..urls import path2url
-from .testing_utils import assert_no_logs
 
 
 def wsgi_client(module, path_info, qs_args=None, method='GET'):

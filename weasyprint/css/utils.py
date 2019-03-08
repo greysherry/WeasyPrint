@@ -5,7 +5,7 @@
     Utils for CSS properties.
     See http://www.w3.org/TR/CSS21/propidx.html and various CSS3 modules.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
@@ -16,10 +16,10 @@ from urllib.parse import unquote, urljoin
 
 from tinycss2.color3 import parse_color
 
+from .properties import Dimension
 from ..formatting_structure import counters
 from ..images import LinearGradient, RadialGradient
 from ..urls import iri_to_uri, url_is_absolute
-from .properties import Dimension
 
 # http://dev.w3.org/csswg/css3-values/#angles
 # 1<unit> is this many radians.
@@ -244,7 +244,7 @@ def parse_2d_position(tokens):
     if length_1 and keyword_2 in ('top', 'center', 'bottom'):
         return length_1, BACKGROUND_POSITION_PERCENTAGES[keyword_2]
     elif length_2 and keyword_1 in ('left', 'center', 'right'):
-            return BACKGROUND_POSITION_PERCENTAGES[keyword_1], length_2
+        return BACKGROUND_POSITION_PERCENTAGES[keyword_1], length_2
     elif (keyword_1 in ('left', 'center', 'right') and
           keyword_2 in ('top', 'center', 'bottom')):
         return (BACKGROUND_POSITION_PERCENTAGES[keyword_1],

@@ -4,7 +4,7 @@
 
     Test various unicode texts and filenames.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
@@ -13,9 +13,9 @@ import os.path
 import shutil
 import tempfile
 
-from ..urls import ensure_url
 from .test_draw import assert_pixels_equal, document_to_pixels, html_to_pixels
 from .testing_utils import FakeHTML, assert_no_logs, resource_filename
+from ..urls import ensure_url
 
 
 @assert_no_logs

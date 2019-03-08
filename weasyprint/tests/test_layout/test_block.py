@@ -4,16 +4,16 @@
 
     Tests for blocks layout.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
 import pytest
 
-from ...formatting_structure import boxes
 from ..test_boxes import render_pages as parse
 from ..testing_utils import assert_no_logs
+from ...formatting_structure import boxes
 
 
 @assert_no_logs

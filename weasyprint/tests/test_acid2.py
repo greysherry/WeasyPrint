@@ -4,15 +4,15 @@
 
     Check the famous Acid2 test.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
-from .. import HTML
 from .test_draw import assert_pixels_equal, image_to_pixels
 from .testing_utils import (
     assert_no_logs, capture_logs, requires, resource_filename)
+from .. import HTML
 
 
 @assert_no_logs

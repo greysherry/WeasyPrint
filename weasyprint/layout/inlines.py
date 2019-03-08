@@ -4,17 +4,13 @@
 
     Line breaking and layout for inline-level boxes.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
 import unicodedata
 
-from ..css import computed_from_cascaded
-from ..css.computed_values import ex_ratio, strut_layout
-from ..formatting_structure import boxes
-from ..text import can_break_text, split_first_line
 from .absolute import AbsolutePlaceholder, absolute_layout
 from .flex import flex_layout
 from .float import avoid_collisions, float_layout
@@ -24,6 +20,10 @@ from .preferred import (
     inline_min_content_width, shrink_to_fit, trailing_whitespace_size)
 from .replaced import image_marker_layout
 from .tables import find_in_flow_baseline, table_wrapper_width
+from ..css import computed_from_cascaded
+from ..css.computed_values import ex_ratio, strut_layout
+from ..formatting_structure import boxes
+from ..text import can_break_text, split_first_line
 
 
 def iter_line_boxes(context, box, position_y, skip_stack, containing_block,
@@ -45,8 +45,11 @@ def iter_line_boxes(context, box, position_y, skip_stack, containing_block,
 
     """
     resolve_percentages(box, containing_block)
-    # TODO: that's wrong, see https://github.com/Kozea/WeasyPrint/issues/679
-    resolve_one_percentage(box, 'text_indent', containing_block.width)
+    if skip_stack is None:
+        # TODO: wrong, see https://github.com/Kozea/WeasyPrint/issues/679
+        resolve_one_percentage(box, 'text_indent', containing_block.width)
+    else:
+        box.text_indent = 0
     while 1:
         line, resume_at = get_next_linebox(
             context, box, position_y, skip_stack, containing_block,
@@ -479,6 +482,7 @@ def atomic_box(context, box, position_x, skip_stack, containing_block,
                device_size, absolute_boxes, fixed_boxes):
     """Compute the width and the height of the atomic ``box``."""
     if isinstance(box, boxes.ReplacedBox):
+        box = box.copy()
         if getattr(box, 'is_list_marker', False):
             image_marker_layout(box)
         else:
@@ -905,10 +909,17 @@ def split_inline_box(context, box, position_x, max_x, skip_stack,
         [box_child for index, box_child in children],
         is_start=is_start, is_end=is_end)
     if isinstance(box, boxes.LineBox):
-        # Line boxes already have a position_x which may not be the same
-        # as content_box_left when text-indent is non-zero.
-        # This is important for justified text.
-        new_box.width = position_x - new_box.position_x
+        # We must reset line box width according to its new children
+        in_flow_children = [
+            box_child for box_child in new_box.children
+            if box_child.is_in_normal_flow()]
+        if in_flow_children:
+            new_box.width = (
+                in_flow_children[-1].position_x +
+                in_flow_children[-1].margin_width() -
+                new_box.position_x)
+        else:
+            new_box.width = 0
     else:
         new_box.position_x = initial_position_x
         if (is_start and box.style['direction'] == 'ltr') or (
@@ -967,7 +978,7 @@ def split_text_box(context, box, available_width, skip):
     # No need to encode what’s after resume_at (if set) or length (if
     # resume_at is not set). One code point is one or more byte, so
     # UTF-8 indexes are always bigger or equal to Unicode indexes.
-    new_text = layout.text_bytes.decode('utf8')
+    new_text = layout.text
     encoded = text.encode('utf8')
     if resume_at is not None:
         between = encoded[length:resume_at].decode('utf8')
@@ -1185,10 +1196,10 @@ def text_align(context, line, available_width, last):
             justify_line(context, line, offset)
         return 0
     if align == 'center':
-        offset /= 2.
+        return offset / 2
     else:
         assert align == 'right'
-    return offset
+        return offset
 
 
 def justify_line(context, line, extra_width):

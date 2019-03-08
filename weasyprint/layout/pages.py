@@ -4,22 +4,22 @@
 
     Layout for pages and CSS3 margin boxes.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
 import copy
 
-from ..css import (
-    PageType, computed_from_cascaded, matching_page_types, set_computed_styles)
-from ..formatting_structure import boxes, build
-from ..logger import LOGGER
 from .absolute import absolute_layout
 from .blocks import block_container_layout, block_level_layout
 from .min_max import handle_min_max_height, handle_min_max_width
 from .percentages import resolve_percentages
 from .preferred import max_content_width, min_content_width
+from ..css import (
+    PageType, computed_from_cascaded, matching_page_types, set_computed_styles)
+from ..formatting_structure import boxes, build
+from ..logger import PROGRESS_LOGGER
 
 
 class OrientedBox(object):
@@ -619,7 +619,17 @@ def make_page(context, root_box, page_type, resume_at, page_number,
                 cached_lookups.append(counter_lookup_id)
                 counter_lookup.page_maker_index = page_number - 1
 
-            # Step 1: local counters
+            # Step 1: page based back-references
+            # Marked as pending by target_collector.cache_target_page_counters
+            if counter_lookup.pending:
+                if (page_counter_values !=
+                        counter_lookup.cached_page_counter_values):
+                    counter_lookup.cached_page_counter_values = copy.deepcopy(
+                        page_counter_values)
+                counter_lookup.pending = False
+                call_parse_again = True
+
+            # Step 2: local counters
             # If the box mixed-in page counters changed, update the content
             # and cache the new values.
             missing_counters = counter_lookup.missing_counters
@@ -635,14 +645,17 @@ def make_page(context, root_box, page_type, resume_at, page_number,
                             counter_name, None)
                         if counter_value is not None:
                             call_parse_again = True
+                            # no need to loop them all
+                            break
 
-            # Step 2: targeted counters
+            # Step 3: targeted counters
             target_missing = counter_lookup.missing_target_counters
             for anchor_name, missed_counters in target_missing.items():
                 if 'pages' not in missed_counters:
                     continue
                 # Adjust 'pages_wanted'
-                item = target_collector.items.get(anchor_name, None)
+                item = target_collector.target_lookup_items.get(
+                    anchor_name, None)
                 page_maker_index = item.page_maker_index
                 if page_maker_index >= 0 and anchor_name in cached_anchors:
                     page_maker[page_maker_index][-1]['pages_wanted'] = True
@@ -752,14 +765,15 @@ def remake_page(index, context, root_box, html, cascaded_styles,
             'anchors': [],
             'content_lookups': [],
         }
+        # Setting content_changed to True ensures remake.
+        # If resume_at is None (last page) it must be False to prevent endless
+        # loops and list index out of range (see #794).
+        remake_state['content_changed'] = resume_at is not None
         # page_state is already a deepcopy
         item = resume_at, next_page, right_page, page_state, remake_state
         if index + 1 >= len(page_maker):
-            # content_changed must be False otherwise: enldess loop
             page_maker.append(item)
         else:
-            # content_changed must be True otherwise: no remake
-            remake_state['content_changed'] = True
             page_maker[index + 1] = item
 
     return page, resume_at
@@ -778,7 +792,7 @@ def make_all_pages(context, root_box, html, cascaded_styles, computed_styles,
         if (len(pages) == 0 or
                 remake_state['content_changed'] or
                 remake_state['pages_wanted']):
-            LOGGER.info('Step 5 - Creating layout - Page %i', i + 1)
+            PROGRESS_LOGGER.info('Step 5 - Creating layout - Page %i', i + 1)
             # Reset remake_state
             remake_state['content_changed'] = False
             remake_state['pages_wanted'] = False
@@ -788,7 +802,7 @@ def make_all_pages(context, root_box, html, cascaded_styles, computed_styles,
                 i, context, root_box, html, cascaded_styles, computed_styles)
             yield page
         else:
-            LOGGER.info(
+            PROGRESS_LOGGER.info(
                 'Step 5 - Creating layout - Page %i (up-to-date)', i + 1)
             resume_at = context.page_maker[i + 1][0]
             yield pages[i]

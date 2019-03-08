@@ -5,7 +5,7 @@
     Validate properties.
     See http://www.w3.org/TR/CSS21/propidx.html and various CSS3 modules.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
@@ -13,13 +13,13 @@
 from tinycss2.color3 import parse_color
 
 from .. import computed_values
-from ...formatting_structure import counters
 from ..properties import KNOWN_PROPERTIES, Dimension
 from ..utils import (
     InvalidValues, comma_separated_list, get_angle, get_content_list,
     get_content_list_token, get_image, get_keyword, get_length, get_resolution,
     get_single_keyword, get_url, parse_2d_position, parse_background_position,
     parse_function, single_keyword, single_token)
+from ...formatting_structure import counters
 
 PREFIX = '-weasy-'
 PROPRIETARY = set()
@@ -327,15 +327,15 @@ def bleed(token):
 def marks(tokens):
     """``marks`` property validation."""
     if len(tokens) == 2:
-        keywords = [get_keyword(token) for token in tokens]
+        keywords = tuple(get_keyword(token) for token in tokens)
         if 'crop' in keywords and 'cross' in keywords:
             return keywords
     elif len(tokens) == 1:
         keyword = get_keyword(tokens[0])
         if keyword in ('crop', 'cross'):
-            return [keyword]
+            return (keyword,)
         elif keyword == 'none':
-            return 'none'
+            return ()
 
 
 @property('outline-style')

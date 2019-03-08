@@ -4,12 +4,11 @@
 
     Page breaking and layout for block-level and block-container boxes.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
-from ..formatting_structure import boxes
 from .absolute import AbsolutePlaceholder, absolute_layout
 from .columns import columns_layout
 from .flex import flex_layout
@@ -21,6 +20,7 @@ from .markers import list_marker_layout
 from .min_max import handle_min_max_width
 from .percentages import resolve_percentages, resolve_position_percentages
 from .tables import table_layout, table_wrapper_width
+from ..formatting_structure import boxes
 
 
 def block_level_layout(context, box, max_position_y, skip_stack,
@@ -143,6 +143,7 @@ def block_replaced_width(box, containing_block, device_size):
 
 def block_replaced_box_layout(box, containing_block, device_size):
     """Lay out the block :class:`boxes.ReplacedBox` ``box``."""
+    box = box.copy()
     if box.style['width'] == 'auto' and box.style['height'] == 'auto':
         computed_margins = box.margin_left, box.margin_right
         block_replaced_width.without_min_max(

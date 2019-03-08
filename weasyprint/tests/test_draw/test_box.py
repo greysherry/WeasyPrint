@@ -4,7 +4,7 @@
 
     Test how boxes, borders, outlines are drawn.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
@@ -12,8 +12,8 @@
 import itertools
 
 from . import B, G, R, _, assert_different_renderings, assert_pixels, b, g
-from ... import HTML
 from ..testing_utils import assert_no_logs
+from ... import HTML
 
 
 @assert_no_logs

@@ -3,6 +3,138 @@
 ======
 
 
+Version 45
+----------
+
+Released on 2019-02-20.
+
+WeasyPrint now has a `code of conduct
+<https://github.com/Kozea/WeasyPrint/blob/master/CODE_OF_CONDUCT.rst>`_.
+
+A new website has been launched, with beautiful and useful graphs about speed
+and memory use across versions: check `WeasyPerf
+<https://kozea.github.io/WeasyPerf/index.html>`_.
+
+Dependencies:
+
+* Python 3.5+ is now needed, Python 3.4 is not supported anymore
+
+Bug fixes:
+
+* `#798 <https://github.com/Kozea/WeasyPrint/pull/798>`_:
+  Prevent endless loop and index out of range in pagination
+* `#767 <https://github.com/Kozea/WeasyPrint/issues/767>`_:
+  Add a ``--quiet`` CLI parameter
+* `#784 <https://github.com/Kozea/WeasyPrint/pull/784>`_:
+  Fix library loading on Alpine
+* `#791 <https://github.com/Kozea/WeasyPrint/pull/791>`_:
+  Use path2url in tests for Windows
+* `#789 <https://github.com/Kozea/WeasyPrint/pull/789>`_:
+  Add LICENSE file to distributed sources
+* `#788 <https://github.com/Kozea/WeasyPrint/pull/788>`_:
+  Fix pending references
+* `#780 <https://github.com/Kozea/WeasyPrint/issues/780>`_:
+  Don't draw patterns for empty page backgrounds
+* `#774 <https://github.com/Kozea/WeasyPrint/issues/774>`_:
+  Don't crash when links include quotes
+* `#637 <https://github.com/Kozea/WeasyPrint/issues/637>`_:
+  Fix a problem with justified text
+* `#763 <https://github.com/Kozea/WeasyPrint/pull/763>`_:
+  Launch tests with Python 3.7
+* `#704 <https://github.com/Kozea/WeasyPrint/issues/704>`_:
+  Fix a corner case with tables
+* `#804 <https://github.com/Kozea/WeasyPrint/pull/804>`_:
+  Don't logger handlers defined before importing WeasyPrint
+* `#109 <https://github.com/Kozea/WeasyPrint/issues/109>`_,
+  `#748 <https://github.com/Kozea/WeasyPrint/issues/748>`_:
+  Don't include punctuation for hyphenation
+* `#770 <https://github.com/Kozea/WeasyPrint/issues/770>`_:
+  Don't crash when people use uppercase words from old-fashioned Microsoft
+  fonts in tables, especially when there's an 5th column
+* Use a `separate logger
+  <https://weasyprint.readthedocs.io/en/latest/tutorial.html#logging>`_ to
+  report the rendering process
+* Add a ``--debug`` CLI parameter and set debug level for unknown prefixed CSS
+  properties
+* Define minimal versions of Python and setuptools in setup.cfg
+
+Documentation
+
+* `#796 <https://github.com/Kozea/WeasyPrint/pull/796>`_:
+  Fix a small typo in the tutorial
+* `#792 <https://github.com/Kozea/WeasyPrint/pull/792>`_:
+  Document no alignement character support
+* `#773 <https://github.com/Kozea/WeasyPrint/pull/773>`_:
+  Fix phrasing in Hacking section
+* `#402 <https://github.com/Kozea/WeasyPrint/issues/402>`_:
+  Add a paragraph about fontconfig error
+* `#764 <https://github.com/Kozea/WeasyPrint/pull/764>`_:
+  Fix list of dependencies for Alpine
+* Fix API documentation of HTML and CSS classes
+
+
+Version 44
+----------
+
+Released on 2018-12-29.
+
+Bug fixes:
+
+* `#742 <https://github.com/Kozea/WeasyPrint/issues/742>`_:
+  Don't crash during PDF generation when locale uses commas as decimal separator
+* `#746 <https://github.com/Kozea/WeasyPrint/issues/746>`_:
+  Close file when reading VERSION
+* Improve speed and memory usage for long texts.
+
+Documentation:
+
+* `#733 <https://github.com/Kozea/WeasyPrint/pull/733>`_:
+  Small documentation fixes
+* `#735 <https://github.com/Kozea/WeasyPrint/pull/735>`_:
+  Fix broken links in NEWS.rst
+
+
+Version 43
+----------
+
+Released on 2018-11-09.
+
+Bug fixes:
+
+* `#726 <https://github.com/Kozea/WeasyPrint/issues/726>`_:
+  Make empty strings clear previous values of named strings
+* `#729 <https://github.com/Kozea/WeasyPrint/issues/729>`_:
+  Include tools in packaging
+
+This version also includes the changes from unstable rc1 and rc2 versions
+listed below.
+
+Version 43rc2
+-------------
+
+Released on 2018-11-02.
+
+**This version is experimental, don't use it in production. If you find bugs,
+please report them!**
+
+Bug fixes:
+
+* `#706 <https://github.com/Kozea/WeasyPrint/issues/706>`_:
+  Fix text-indent at the beginning of a page
+* `#687 <https://github.com/Kozea/WeasyPrint/issues/687>`_:
+  Allow query strings in file:// URIs
+* `#720 <https://github.com/Kozea/WeasyPrint/issues/720>`_:
+  Optimize minimum size calculation of long inline elements
+* `#717 <https://github.com/Kozea/WeasyPrint/issues/717>`_:
+  Display <details> tags as blocks
+* `#691 <https://github.com/Kozea/WeasyPrint/issues/691>`_:
+  Don't recalculate max content widths when distributing extra space for tables
+* `#722 <https://github.com/Kozea/WeasyPrint/issues/722>`_:
+  Fix bookmarks and strings set on images
+* `#723 <https://github.com/Kozea/WeasyPrint/issues/723>`_:
+  Warn users when string() is not used in page margin
+
+
 Version 43rc1
 -------------
 
@@ -25,7 +157,7 @@ New features:
   Initial support of flexbox
 * `#592 <https://github.com/Kozea/WeasyPrint/pull/592>`_:
   Support @font-face on Windows
-* `#306 <https://github.com/Kozea/WeasyPrint/issue/306>`_:
+* `#306 <https://github.com/Kozea/WeasyPrint/issues/306>`_:
   Add a timeout parameter to the URL fetcher functions
 * `#594 <https://github.com/Kozea/WeasyPrint/pull/594>`_:
   Split tests using modern pytest features
@@ -35,9 +167,9 @@ New features:
   Handle target counters and target texts
 * `#631 <https://github.com/Kozea/WeasyPrint/pull/631>`_:
   Enable counter-increment and counter-reset in page context
-* `#622 <https://github.com/Kozea/WeasyPrint/issue/622>`_:
+* `#622 <https://github.com/Kozea/WeasyPrint/issues/622>`_:
   Allow pathlib.Path objects for HTML, CSS and Attachment classes
-* `#674 <https://github.com/Kozea/WeasyPrint/issue/674>`_:
+* `#674 <https://github.com/Kozea/WeasyPrint/issues/674>`_:
   Add extensive installation instructions for Windows
 
 Bug fixes:
@@ -107,7 +239,7 @@ Bug fixes:
 * `#567 <https://github.com/Kozea/WeasyPrint/issues/567>`_:
   Fix text-indent with text-align: justify.
 * `#465 <https://github.com/Kozea/WeasyPrint/issues/465>`_:
-  Fix string(*, start).
+  Fix string(\*, start).
 * `#562 <https://github.com/Kozea/WeasyPrint/issues/562>`_:
   Handle named pages with pseudo-class.
 * `#507 <https://github.com/Kozea/WeasyPrint/issues/507>`_:
@@ -803,8 +935,8 @@ Version 0.16
 
 Released on 2012-12-13.
 
-* Add the :obj:`zoom` parameter to :meth:`HTML.write_pdf` and
-  :meth:`Document.write_pdf() <weasyprint.document.Document.write_pdf>`
+* Add the ``zoom`` parameter to ``HTML.write_pdf`` and
+  ``Document.write_pdf() <weasyprint.document.Document.write_pdf>``
 * Fix compatibility with old (and buggy) pycairo versions.
   WeasyPrint is now tested on 1.8.8 in addition to the latest.
 * Fix layout bugs related to line trailing spaces.
@@ -817,7 +949,7 @@ Released on 2012-10-09.
 
 * Add a low-level API that enables painting pages individually on any
   cairo surface.
-* **Backward-incompatible change**: remove the :meth:`HTML.get_png_pages`
+* **Backward-incompatible change**: remove the ``HTML.get_png_pages``
   method. The new low-level API covers this functionality and more.
 * Add support for the ``font-stretch`` property.
 * Add support for ``@page:blank`` to select blank pages.

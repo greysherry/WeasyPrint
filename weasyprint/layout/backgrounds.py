@@ -2,7 +2,7 @@
     weasyprint.backgrounds
     ----------------------
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
@@ -11,8 +11,8 @@ from collections import namedtuple
 from itertools import cycle
 
 from . import replaced
-from ..formatting_structure import boxes
 from .percentages import resolve_radii_percentages
+from ..formatting_structure import boxes
 
 Background = namedtuple('Background', 'color, layers, image_rendering')
 BackgroundLayer = namedtuple(

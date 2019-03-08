@@ -4,7 +4,7 @@
 
     Test the CSS parsing, cascade, inherited and computed values.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
@@ -12,13 +12,13 @@
 import pytest
 import tinycss2
 
+from .testing_utils import (
+    BASE_URL, FakeHTML, assert_no_logs, capture_logs, resource_filename)
 from .. import CSS, css, default_url_fetcher
 from ..css import PageType, get_all_computed_styles, parse_page_selectors
 from ..css.computed_values import strut_layout
 from ..layout.pages import set_page_type_computed_styles
 from ..urls import path2url
-from .testing_utils import (
-    BASE_URL, FakeHTML, assert_no_logs, capture_logs, resource_filename)
 
 
 @assert_no_logs

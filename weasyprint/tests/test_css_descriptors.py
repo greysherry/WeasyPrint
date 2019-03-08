@@ -4,16 +4,16 @@
 
     Test CSS descriptors.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
 import tinycss2
 
+from .testing_utils import assert_no_logs, capture_logs
 from ..css import preprocess_stylesheet
 from ..css.validation.descriptors import preprocess_descriptors
-from .testing_utils import assert_no_logs, capture_logs
 
 
 @assert_no_logs

@@ -4,7 +4,7 @@
 
     Test expanders for shorthand properties.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
@@ -14,11 +14,11 @@ import math
 import pytest
 import tinycss2
 
+from .testing_utils import assert_no_logs, capture_logs
 from ..css import preprocess_declarations
 from ..css.computed_values import ZERO_PIXELS
 from ..css.properties import INITIAL_VALUES, Dimension
 from ..images import LinearGradient, RadialGradient
-from .testing_utils import assert_no_logs, capture_logs
 
 
 def expand_to_dict(css, expected_error=None):

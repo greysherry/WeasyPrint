@@ -4,17 +4,17 @@
 
     Test the text layout.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
 import pytest
 
-from ..css.properties import INITIAL_VALUES
-from ..text import split_first_line
 from .test_boxes import render_pages
 from .testing_utils import MONO_FONTS, SANS_FONTS, assert_no_logs
+from ..css.properties import INITIAL_VALUES
+from ..text import split_first_line
 
 
 def make_text(text, width=None, **style):
@@ -291,6 +291,39 @@ def test_text_align_justify_text_indent():
 
 
 @assert_no_logs
+def test_text_align_justify_no_break_between_children():
+    # Test justification when line break happens between two inline children
+    # that must stay together.
+    # Test regression: https://github.com/Kozea/WeasyPrint/issues/637
+    page, = render_pages('''
+      <style>
+        @font-face {src: url(AHEM____.TTF); font-family: ahem}
+        p { text-align: justify; font-family: ahem; width: 7em }
+      </style>
+      <p>
+        <span>a</span>
+        <span>b</span>
+        <span>bla</span><span>,</span>
+        <span>b</span>
+      </p>
+    ''')
+    html, = page.children
+    body, = html.children
+    paragraph, = body.children
+    line_1, line_2 = paragraph.children
+
+    span_1, space_1, span_2, space_2 = line_1.children
+    assert span_1.position_x == 0
+    assert span_2.position_x == 6 * 16  # 1 character + 5 spaces
+    assert line_1.width == 7 * 16  # 7em
+
+    span_1, span_2, space_1, span_3, space_2 = line_2.children
+    assert span_1.position_x == 0
+    assert span_2.position_x == 3 * 16  # 3 characters
+    assert span_3.position_x == 5 * 16  # (3 + 1) characters + 1 space
+
+
+@assert_no_logs
 def test_word_spacing():
     # keep the empty <style> as a regression test: element.text is None
     # (Not a string.)
@@ -365,27 +398,56 @@ def test_letter_spacing_1():
     assert line1.children[0].width == strong_2.width
 
 
+@pytest.mark.parametrize('indent', ('12px', '6%'))
 @assert_no_logs
-def test_text_indent():
-    for indent in ['12px', '6%']:  # 6% of 200px is 12px
-        page, = render_pages('''
-            <style>
-                @page { size: 220px }
-                body { margin: 10px; text-indent: %(indent)s }
-            </style>
-            <p>Some text that is long enough that it take at least three line,
-               but maybe more.
-        ''' % {'indent': indent})
-        html, = page.children
-        body, = html.children
-        paragraph, = body.children
-        lines = paragraph.children
-        text_1, = lines[0].children
-        text_2, = lines[1].children
-        text_3, = lines[2].children
-        assert text_1.position_x == 22  # 10px margin-left + 12px indent
-        assert text_2.position_x == 10  # No indent
-        assert text_3.position_x == 10  # No indent
+def test_text_indent(indent):
+    page, = render_pages('''
+        <style>
+            @page { size: 220px }
+            body { margin: 10px; text-indent: %(indent)s }
+        </style>
+        <p>Some text that is long enough that it take at least three line,
+           but maybe more.
+    ''' % {'indent': indent})
+    html, = page.children
+    body, = html.children
+    paragraph, = body.children
+    lines = paragraph.children
+    text_1, = lines[0].children
+    text_2, = lines[1].children
+    text_3, = lines[2].children
+    assert text_1.position_x == 22  # 10px margin-left + 12px indent
+    assert text_2.position_x == 10  # No indent
+    assert text_3.position_x == 10  # No indent
+
+
+@pytest.mark.parametrize('indent', ('12px', '6%'))
+@assert_no_logs
+def test_text_indent_multipage(indent):
+    # Test regression: https://github.com/Kozea/WeasyPrint/issues/706
+    pages = render_pages('''
+        <style>
+            @page { size: 220px 1.5em; margin: 0 }
+            body { margin: 10px; text-indent: %(indent)s }
+        </style>
+        <p>Some text that is long enough that it take at least three line,
+           but maybe more.
+    ''' % {'indent': indent})
+    page = pages.pop(0)
+    html, = page.children
+    body, = html.children
+    paragraph, = body.children
+    line, = paragraph.children
+    text, = line.children
+    assert text.position_x == 22  # 10px margin-left + 12px indent
+
+    page = pages.pop(0)
+    html, = page.children
+    body, = html.children
+    paragraph, = body.children
+    line, = paragraph.children
+    text, = line.children
+    assert text.position_x == 10  # No indent
 
 
 @assert_no_logs
@@ -523,6 +585,23 @@ def test_hyphenate_manual_2():
 
 
 @assert_no_logs
+def test_hyphenate_manual_3():
+    # Automatic hyphenation opportunities within a word must be ignored if the
+    # word contains a conditional hyphen, in favor of the conditional
+    # hyphen(s).
+    page, = render_pages(
+        '<html style="width: 0.1em" lang="en">'
+        '<body style="hyphens: auto">in&shy;lighten&shy;lighten&shy;in')
+    html, = page.children
+    body, = html.children
+    line_1, line_2, line_3, line_4 = body.children
+    assert line_1.children[0].text == 'in\xad‐'
+    assert line_2.children[0].text == 'lighten\xad‐'
+    assert line_3.children[0].text == 'lighten\xad‐'
+    assert line_4.children[0].text == 'in'
+
+
+@assert_no_logs
 def test_hyphenate_limit_zone_1():
     page, = render_pages(
         '<html style="width: 12em; font-family: ahem">'
@@ -617,6 +696,27 @@ def test_hyphenate_limit_chars(css, result):
     body, = html.children
     lines = body.children
     assert len(lines) == result
+
+
+@assert_no_logs
+@pytest.mark.parametrize('css', (
+    # light·en
+    '3 3 3',  # 'en' is shorter than 3
+    '3 6 2',  # 'light' is shorter than 6
+    '8',  # 'lighten' is shorter than 8
+))
+def test_hyphenate_limit_chars_punctuation(css):
+    # See https://github.com/Kozea/WeasyPrint/issues/109
+    page, = render_pages(
+        '<html style="width: 1em; font-family: ahem">'
+        '<style>@font-face {src: url(AHEM____.TTF); font-family: ahem}</style>'
+        '<body style="hyphens: auto;'
+        'hyphenate-limit-chars: %s" lang=en>'
+        '..lighten..' % css)
+    html, = page.children
+    body, = html.children
+    lines = body.children
+    assert len(lines) == 1
 
 
 @assert_no_logs
@@ -785,6 +885,43 @@ def test_white_space_10():
 
 
 @assert_no_logs
+def test_white_space_11():
+    # Test regression: https://github.com/Kozea/WeasyPrint/issues/813
+    page, = render_pages('''
+      <style>
+        pre { width: 0 }
+      </style>
+      <body><pre>This<br/>is text''')
+    html, = page.children
+    body, = html.children
+    pre, = body.children
+    line1, line2 = pre.children
+    text1, box = line1.children
+    assert text1.text == 'This'
+    assert box.element_tag == 'br'
+    text2, = line2.children
+    assert text2.text == 'is text'
+
+
+@assert_no_logs
+def test_white_space_12():
+    # Test regression: https://github.com/Kozea/WeasyPrint/issues/813
+    page, = render_pages('''
+      <style>
+        pre { width: 0 }
+      </style>
+      <body><pre>This is <span>lol</span> text''')
+    html, = page.children
+    body, = html.children
+    pre, = body.children
+    line1, = pre.children
+    text1, span, text2 = line1.children
+    assert text1.text == 'This is '
+    assert span.element_tag == 'span'
+    assert text2.text == ' text'
+
+
+@assert_no_logs
 @pytest.mark.parametrize('value, width', (
     (8, 144),  # (2 + (8 - 1)) * 16
     (4, 80),  # (2 + (4 - 1)) * 16
@@ -837,3 +974,12 @@ def test_text_transform():
     line5, = p5.children
     text5, = line5.children
     assert text5.text == 'hé lO1'
+
+
+@assert_no_logs
+def test_text_floating_pre_line():
+    # Test regression: https://github.com/Kozea/WeasyPrint/issues/610
+    page, = render_pages('''
+      <div style="float: left; white-space: pre-line">This is
+      oh this end </div>
+    ''')

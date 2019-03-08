@@ -4,16 +4,16 @@
 
     Layout for columns.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
 from math import floor
 
-from ..formatting_structure import boxes
 from .absolute import absolute_layout
 from .percentages import resolve_percentages
+from ..formatting_structure import boxes
 
 
 def columns_layout(context, box, max_position_y, skip_stack, containing_block,

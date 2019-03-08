@@ -4,13 +4,13 @@
 
     Test the HTML presentational hints.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
-from .. import CSS, HTML
 from .testing_utils import BASE_URL, assert_no_logs
+from .. import CSS, HTML
 
 PH_TESTING_CSS = CSS(string='''
 @page {margin: 0; size: 1000px 1000px}

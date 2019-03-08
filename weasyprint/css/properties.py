@@ -4,7 +4,7 @@
 
     Various data about known properties.
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
@@ -145,7 +145,7 @@ INITIAL_VALUES = {
     'bleed_right': 'auto',
     'bleed_top': 'auto',
     'bleed_bottom': 'auto',
-    'marks': 'none',
+    'marks': (),  # computed value for 'none'
 
     # Text 3/4 (WD/WD): https://www.w3.org/TR/css-text-4/
     'hyphenate_character': '‐',  # computed value chosen by the user agent

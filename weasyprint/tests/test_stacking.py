@@ -2,16 +2,16 @@
     weasyprint.tests.stacking
     -------------------------
 
-    :copyright: Copyright 2011-2018 Simon Sapin and contributors, see AUTHORS.
+    :copyright: Copyright 2011-2019 Simon Sapin and contributors, see AUTHORS.
     :license: BSD, see LICENSE for details.
 
 """
 
 import pytest
 
-from ..stacking import StackingContext
 from .test_boxes import render_pages, serialize
 from .testing_utils import assert_no_logs
+from ..stacking import StackingContext
 
 
 def serialize_stacking(context):
