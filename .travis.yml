@@ -14,10 +14,9 @@ before_install:
   - py -m pip install --upgrade pip setuptools
   - wget "http://repo.msys2.org/distrib/x86_64/msys2-base-x86_64-20180531.tar.xz"
   - 7z e msys2-base-x86_64-20180531.tar.xz
-  - 7z e -y msys2-base-x86_64-20180531.tar
+  - 7z x -y msys2-base-x86_64-20180531.tar
   - echo $PWD
   - ls -lA
-  - ls -lA *
   - ./msys64/msys2.exe pacman -Syuu
   - ./msys64/msys2.exe pacman -Su
   - ./msys64/msys2.exe pacman -S mingw-w64-x86_64-gtk3
