@@ -18,5 +18,6 @@ install:
   - py -m pip install --upgrade pip setuptools
 
 script:
+  - set PATH=%PATH%;C:\msys2\mingw64\bin
   - py -m pip install .[test]
   - py -m pytest
