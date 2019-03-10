@@ -12,6 +12,7 @@ matrix:
 before_install:
   - choco install python
   - choco install msys2
+  - choco install dejavufonts
 
 install:
   - powershell -executionpolicy bypass "C:\tools\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-gtk3 --noconfirm'"
