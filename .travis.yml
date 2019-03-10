@@ -16,11 +16,8 @@ before_install:
 install:
   - powershell -executionpolicy bypass "C:\tools\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-gtk3 --noconfirm'"
   - py -m pip install --upgrade pip setuptools
-  - ls /c/tools/msys64
-  - ls /c/tools/msys64/mingw64
-  - ls /c/tools/msys64/mingw64/bin
+  - export "PATH=$PATH:C:\tools\msys64\mingw64\bin"
 
 script:
-  - export "PATH=$PATH:C:\tools\msys64\mingw64\bin"
   - py -m pip install .[test]
   - py -m pytest
