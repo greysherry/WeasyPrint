@@ -17,7 +17,7 @@ matrix:
       language: generic
       env: PYTHON=python3
     - os: windows
-      language: generic
+      language: cpp
       env: PYTHON=py
   allow_failures:
     # Ignore frequent segmentation faults
