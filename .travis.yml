@@ -11,7 +11,7 @@ matrix:
       filter_secrets: false
 
 before_install:
-  - export "PATH=$PATH:C:\tools\msys64\mingw64\bin"
+  - export "PATH=$PATH;C:\tools\msys64\mingw64\bin"
   - choco install python
   - choco install msys2
   - choco install dejavufonts
