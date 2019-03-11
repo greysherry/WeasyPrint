@@ -18,7 +18,7 @@ matrix:
       env: PYTHON=python3
     - os: windows
       language: cpp
-      env: PYTHON=py
+      env: PYTHON=/c/Python37/python
   allow_failures:
     # Ignore frequent segmentation faults
     - os: windows
