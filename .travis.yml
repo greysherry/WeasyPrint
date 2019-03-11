@@ -50,4 +50,6 @@ before_install:
   - $PYTHON -m pip install --upgrade pip setuptools
 
 script:
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then WHERE pip; fi
+
   - $PYTHON setup.py test
