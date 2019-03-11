@@ -17,7 +17,7 @@ matrix:
       language: generic
       env: PYTHON=python3
     - os: windows
-      language: cpp
+      language: generic
       env: PYTHON=py
   allow_failures:
     # Ignore frequent segmentation faults
@@ -32,8 +32,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then export "PATH=$PATH;C:\msys64\mingw64\bin"; fi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install -y python dejavufonts; fi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then wget "http://repo.msys2.org/distrib/x86_64/msys2-base-x86_64-20180531.tar.xz"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 7z e msys2-base-x86_64-20180531.tar.xz -so | 7z x -aoa -si -ttar -oc:\; fi
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then powershell -executionpolicy bypass "C:\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-gtk3 --noconfirm'"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then powershell "7z e msys2-base-x86_64-20180531.tar.xz -so | 7z x -aoa -si -ttar -oC:\ "; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then powershell "C:\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-gtk3 --noconfirm'"; fi
 
   # As setup.py doesn't use pip, setuptools is not updated before installing dependencies
   - $PYTHON -m pip install --upgrade pip setuptools
