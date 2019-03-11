@@ -11,11 +11,16 @@ matrix:
       filter_secrets: false
 
 before_install:
-  - export "PATH=$PATH;C:\tools\msys64\mingw64\bin"
+  - export "PATH=$PATH;C:\msys64\mingw64\bin"
   - choco install -y python
-  - choco install -y msys2 --params "/NoUpdate"
   - choco install -y dejavufonts
-  - powershell -executionpolicy bypass "C:\tools\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-gtk3 --noconfirm'"
+  - wget "http://repo.msys2.org/distrib/x86_64/msys2-base-x86_64-20180531.tar.xz"
+  - 7z e msys2-base-x86_64-20180531.tar.xz
+  - 7z x -y msys2-base-x86_64-20180531.tar
+  - mv msys64 /c/
+  - powershell -executionpolicy bypass "C:\msys64\usr\bin\bash -lc 'pacman -Syuu --noconfirm --ask 20'"
+  - powershell -executionpolicy bypass "C:\msys64\usr\bin\bash -lc 'pacman -Su --noconfirm --ask 20'"
+  - powershell -executionpolicy bypass "C:\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-gtk3 --noconfirm --ask 20'"
 
 install:
   - py -m pip install --upgrade pip setuptools
