@@ -54,6 +54,6 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then echo $PATH; fi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then WHERE py; fi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then $PYTHON -c "import sys;print(sys.path)"; fi
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then $PYTHON -v setup.py test; fi
 
   - $PYTHON setup.py test
