@@ -17,11 +17,9 @@ matrix:
       language: generic
       env: PYTHON=python3
     - os: windows
+      # Windows doesn't support python or even generic language
       language: cpp
       env: PYTHON=/c/Python37/python
-  allow_failures:
-    # Ignore frequent segmentation faults
-    - os: windows
 
 addons:
   apt:
@@ -34,6 +32,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then wget "http://repo.msys2.org/distrib/x86_64/msys2-base-x86_64-20180531.tar.xz"; fi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 7z e msys2-base-x86_64-20180531.tar.xz; fi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then 7z x -y msys2-base-x86_64-20180531.tar -oc:\\; fi
+  # We need powershell because Travis' bash and MSYS2's bash rely on conflicting libraries
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then powershell "C:\msys64\usr\bin\bash -lc 'pacman -S mingw-w64-x86_64-gtk3 --noconfirm'"; fi
 
   # Pango 1.38+ is needed to make @font-face work, remove these two lines when it's available on Travis
@@ -49,6 +48,8 @@ before_install:
 
   # As setup.py doesn't use pip, setuptools is not updated before installing dependencies
   - $PYTHON -m pip install --upgrade pip setuptools
+
+  # Upgrade cffi to avoid errors while installing cairocffi
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then $PYTHON -m pip install --upgrade cffi; fi
 
 script:
