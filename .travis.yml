@@ -49,6 +49,7 @@ before_install:
 
   # As setup.py doesn't use pip, setuptools is not updated before installing dependencies
   - $PYTHON -m pip install --upgrade pip setuptools
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then $PYTHON -m pip install --upgrade cffi; fi
 
 script:
   - $PYTHON setup.py test
